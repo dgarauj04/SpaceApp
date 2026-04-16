@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
-import tags from './tags.json'
+import tags from './tags.json';
+import { useBusca } from '../../../Contextos/BuscaContext';
 
 const TagsContainer = styled.section`
     display: flex;
@@ -37,11 +38,17 @@ const Div = styled.div`
 `
 
 const Tags = () => {
+    const { executarBusca } = useBusca();
+
     return (
         <TagsContainer>
         <TagTitulo>Busque por tags:</TagTitulo>
         <Div>
-            { tags.map(tag => <Tag key={tag.id}>{tag.titulo}</Tag>)}
+            { tags.map(tag => (
+                <Tag key={tag.id} onClick={() => executarBusca(tag.query)}>
+                    {tag.titulo}
+                </Tag>
+            ))}
         </Div>
     </TagsContainer>
     )

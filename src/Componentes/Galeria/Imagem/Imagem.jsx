@@ -1,8 +1,9 @@
 import { styled } from "styled-components"
 import BotaoIcone from "../../BotaoIcone/BotaoIcone";
+import { useCurtidas } from "../../../Contextos/CurtidasContext";
 
 const Figure = styled.figure`
-    width: ${ props => (props.$expandida ? '90%' : '400px') };
+    width: ${ props => (props.$expandida ? '90%' : '380px') };
     max-width: 100%;
     margin: 0;
     display: flex;
@@ -27,7 +28,7 @@ const Figure = styled.figure`
             margin: 0;
             font-size: 16px;
         }
-    } 
+    }
 `
 
 const Rodape = styled.footer`
@@ -36,13 +37,42 @@ const Rodape = styled.footer`
     align-items: center;
 `
 
-const Imagem = ({ foto, expandida = false, aoZoomSolicitado, aoAlternarFavorito }) => {
+const AcoesContainer = styled.div`
+    display: flex;
+    gap: 8px;
+    align-items: center;
+`
 
-    // const iconeFavorito = foto.favorita ? '/icones/favorito-ativo.png' : '/icones/favorito.png'
+const CurtidasContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 20px;
+    padding: 4px 8px;
+`
+
+const ContadorCurtidas = styled.span`
+    font-size: 12px;
+    font-weight: 600;
+    color: ${props => props.$curtido ? '#ff6b9d' : '#fff'};
+    min-width: 20px;
+    text-align: center;
+`
+
+const Imagem = ({ foto, expandida = false, aoZoomSolicitado, aoAlternarFavorito }) => {
+    const { jaCurtiu, incrementarCurtida, getCurtidasCount } = useCurtidas();
+
     let iconeFavorito = '/icones/favorito.png';
     if (foto.favorito) {
         iconeFavorito = '/icones/favorito-ativo.png'
     }
+
+    const curtido = jaCurtiu(foto.id);
+    const curtidasCount = getCurtidasCount(foto.id);
+
+    const handleCurtir = () => {
+        incrementarCurtida(foto.id);
+    };
 
     return (
     <Figure $expandida={expandida} id={`foto-${foto.id}`}>
@@ -51,12 +81,29 @@ const Imagem = ({ foto, expandida = false, aoZoomSolicitado, aoAlternarFavorito 
             <h3>{foto.titulo}</h3>
             <Rodape>
                 <h4>{foto.fonte}</h4>
-                <BotaoIcone onClick={() => aoAlternarFavorito(foto) }>
-                    <img src={iconeFavorito} alt="Icone de favorito" />
-                </BotaoIcone>
-                {!expandida && <BotaoIcone aria-hidden={expandida} onClick={() => aoZoomSolicitado(foto) }>
-                    <img src="/icones/expandir.png" alt="Icone de expandir" />
-                </BotaoIcone>}
+                <AcoesContainer>
+                    {!expandida && (
+                        <CurtidasContainer>
+                            <BotaoIcone
+                                onClick={handleCurtir}
+                                title={curtido ? "Curtir novamente" : "Curtir"}
+                            >
+                                <img src="/icones/mais-curtidas-ativo.png" alt="Curtir" style={{ filter: curtido ? 'none' : 'grayscale(100%)' }} />
+                            </BotaoIcone>
+                            {curtidasCount > 0 && (
+                                <ContadorCurtidas $curtido={curtido}>
+                                    {curtidasCount}
+                                </ContadorCurtidas>
+                            )}
+                        </CurtidasContainer>
+                    )}
+                    <BotaoIcone onClick={() => aoAlternarFavorito(foto) }>
+                        <img src={iconeFavorito} alt="Icone de favorito" />
+                    </BotaoIcone>
+                    {!expandida && <BotaoIcone aria-hidden={expandida} onClick={() => aoZoomSolicitado(foto) }>
+                        <img src="/icones/expandir.png" alt="Icone de expandir" />
+                    </BotaoIcone>}
+                </AcoesContainer>
             </Rodape>
         </figcaption>
     </Figure>

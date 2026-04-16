@@ -1,22 +1,27 @@
 [
     {
         "id": 0,
-        "titulo": "Todas"
+        "titulo": "Todas",
+        "query": "space nebula galaxy"
     },
     {
         "id": 1,
-        "titulo": "Estrelas"
+        "titulo": "Estrelas",
+        "query": "stars"
     },
     {
         "id": 2,
-        "titulo": "Galáxias"
+        "titulo": "Galáxias",
+        "query": "galaxy"
     },
     {
         "id": 3,
-        "titulo": "Luas"
+        "titulo": "Luas",
+        "query": "moon"
     },
     {
         "id": 4,
-        "titulo": "Nebulosas"
+        "titulo": "Nebulosas",
+        "query": "nebula"
     }
 ]

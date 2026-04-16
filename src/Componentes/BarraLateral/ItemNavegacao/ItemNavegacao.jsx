@@ -12,9 +12,9 @@ const ItemNavegacaoEstilizado = styled.li`
      gap: 22px;
 `
 
-const ItemNavegacao = ({ children, iconAtivo, iconInativo, ativo = false }) => {
+const ItemNavegacao = ({ children, iconAtivo, iconInativo, ativo = false, onClick }) => {
   return (
-    <ItemNavegacaoEstilizado $ativo={ativo}>
+    <ItemNavegacaoEstilizado $ativo={ativo} onClick={onClick} title={typeof children === 'string' ? children : undefined}>
         <img src={ativo ? iconAtivo : iconInativo} alt="" />
         {children}
    </ItemNavegacaoEstilizado>

@@ -1,5 +1,6 @@
 import { styled } from "styled-components"
 import Imagem from "../Galeria/Imagem/Imagem"
+import NasaImagem from "../NasaGaleria/NasaImagem/NasaImagem"
 import BotaoIcone from "../BotaoIcone/BotaoIcone"
 
 const Overlay = styled.div`
@@ -30,12 +31,25 @@ const DialogEstilizado = styled.dialog`
 `
 
 const ModalZoom = ({ foto, aoFechar, aoAlternarFavorito }) => {
+    const ehNasaFoto = foto?.origem === 'nasa' || foto?.id?.toString().startsWith('nasa-');
+
     return (
         <>
             { foto && <>
                 <Overlay />
                 <DialogEstilizado open={!!foto} onClose={aoFechar}>
-                    <Imagem foto={foto} aoAlternarFavorito={aoAlternarFavorito} expandida={true} />
+                    {ehNasaFoto ? (
+                        <NasaImagem
+                            foto={foto}
+                            expandida={true}
+                        />
+                    ) : (
+                        <Imagem
+                            foto={foto}
+                            aoAlternarFavorito={aoAlternarFavorito}
+                            expandida={true}
+                        />
+                    )}
                     <form method="dialog">
                        <BotaoIcone formMethod="dialog">
                             <img src="/icones/fechar.png" alt="Icone de fechar" />
